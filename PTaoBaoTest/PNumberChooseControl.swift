@@ -7,6 +7,44 @@
 //
 
 import UIKit
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l > r
+  default:
+    return rhs < lhs
+  }
+}
+
+fileprivate func >= <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l >= r
+  default:
+    return !(lhs < rhs)
+  }
+}
+
+fileprivate func <= <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l <= r
+  default:
+    return !(rhs < lhs)
+  }
+}
+
 
 class PNumberChooseControl: UIControl,UITextFieldDelegate {
 
@@ -38,62 +76,62 @@ class PNumberChooseControl: UIControl,UITextFieldDelegate {
         _padding = 8.0
         _fontSize = 20.0
 
-        tipLabel = UILabel.init(frame: CGRectMake(_padding!, _padding!, 120, _contentSize!.height - 2 * _padding!))
-        tipLabel?.backgroundColor = UIColor.clearColor()
+        tipLabel = UILabel.init(frame: CGRect(x: _padding!, y: _padding!, width: 120, height: _contentSize!.height - 2 * _padding!))
+        tipLabel?.backgroundColor = UIColor.clear
         tipLabel?.font = UIFont.init(name: "AppleSDGothicNeo-Regular", size: _fontSize! - 3)
         tipLabel?.text = "购买数量"
         self.addSubview(tipLabel!)
 
-        decreaseButton = UIButton.init(type: .Custom)
-        decreaseButton?.frame = CGRectMake(_contentSize!.width - 130 , _padding!, 40, 40)
-        decreaseButton?.titleLabel?.font = UIFont.boldSystemFontOfSize(_fontSize!)
-        decreaseButton?.setTitle("-", forState: .Normal)
-        decreaseButton?.setTitleColor(UIColor.blackColor(), forState: .Normal)
-        decreaseButton?.setTitleColor(UIColor.lightGrayColor(), forState: .Highlighted)
-        decreaseButton?.setTitleColor(UIColor.lightGrayColor(), forState: .Selected)
-        decreaseButton?.setTitleColor(UIColor.lightGrayColor(), forState: .Disabled)
+        decreaseButton = UIButton.init(type: .custom)
+        decreaseButton?.frame = CGRect(x: _contentSize!.width - 130 , y: _padding!, width: 40, height: 40)
+        decreaseButton?.titleLabel?.font = UIFont.boldSystemFont(ofSize: _fontSize!)
+        decreaseButton?.setTitle("-", for: UIControlState())
+        decreaseButton?.setTitleColor(UIColor.black, for: UIControlState())
+        decreaseButton?.setTitleColor(UIColor.lightGray, for: .highlighted)
+        decreaseButton?.setTitleColor(UIColor.lightGray, for: .selected)
+        decreaseButton?.setTitleColor(UIColor.lightGray, for: .disabled)
         decreaseButton?.layer.borderWidth = 1
-        decreaseButton?.layer.borderColor = UIColor.init(red: 209.0/255.0, green: 213.0/255.0, blue: 219.0/255.0, alpha: 1).CGColor
-        decreaseButton?.addTarget(self, action: #selector(self.decreaseButtonAction(_:)), forControlEvents: .TouchUpInside)
+        decreaseButton?.layer.borderColor = UIColor.init(red: 209.0/255.0, green: 213.0/255.0, blue: 219.0/255.0, alpha: 1).cgColor
+        decreaseButton?.addTarget(self, action: #selector(self.decreaseButtonAction(_:)), for: .touchUpInside)
         self.addSubview(decreaseButton!)
 
-        textField = UITextField.init(frame: CGRectMake(_contentSize!.width - 90 - 1, _padding!, 50, 40))
+        textField = UITextField.init(frame: CGRect(x: _contentSize!.width - 90 - 1, y: _padding!, width: 50, height: 40))
         textField?.font = UIFont.init(name: "AppleSDGothicNeo-Regular", size: _fontSize!)
-        textField?.backgroundColor = UIColor.clearColor()
-        textField?.textAlignment = .Center
+        textField?.backgroundColor = UIColor.clear
+        textField?.textAlignment = .center
         textField?.layer.borderWidth = 1
         textField?.delegate = self
         textField?.text = "1"
-        textField?.keyboardType = .NumberPad
-        textField?.layer.borderColor = UIColor.init(red: 209.0/255.0, green: 213.0/255.0, blue: 219.0/255.0, alpha: 1).CGColor
-        textField?.enabled = false
+        textField?.keyboardType = .numberPad
+        textField?.layer.borderColor = UIColor.init(red: 209.0/255.0, green: 213.0/255.0, blue: 219.0/255.0, alpha: 1).cgColor
+        textField?.isEnabled = false
         self.addSubview(textField!)
 
-        increaseButton = UIButton.init(type: .Custom)
-        increaseButton?.frame = CGRectMake(_contentSize!.width - 40 - 2, _padding!, 40, 40)
-        increaseButton?.titleLabel?.font = UIFont.boldSystemFontOfSize(_fontSize!)
-        increaseButton?.setTitle("+", forState: .Normal)
-        increaseButton?.setTitleColor(UIColor.blackColor(), forState: .Normal)
-        increaseButton?.setTitleColor(UIColor.lightGrayColor(), forState: .Highlighted)
-        increaseButton?.setTitleColor(UIColor.lightGrayColor(), forState: .Selected)
-        increaseButton?.setTitleColor(UIColor.lightGrayColor(), forState: .Disabled)
+        increaseButton = UIButton.init(type: .custom)
+        increaseButton?.frame = CGRect(x: _contentSize!.width - 40 - 2, y: _padding!, width: 40, height: 40)
+        increaseButton?.titleLabel?.font = UIFont.boldSystemFont(ofSize: _fontSize!)
+        increaseButton?.setTitle("+", for: UIControlState())
+        increaseButton?.setTitleColor(UIColor.black, for: UIControlState())
+        increaseButton?.setTitleColor(UIColor.lightGray, for: .highlighted)
+        increaseButton?.setTitleColor(UIColor.lightGray, for: .selected)
+        increaseButton?.setTitleColor(UIColor.lightGray, for: .disabled)
         increaseButton?.layer.borderWidth = 1
-        increaseButton?.layer.borderColor = UIColor.init(red: 209.0/255.0, green: 213.0/255.0, blue: 219.0/255.0, alpha: 1).CGColor
-        increaseButton?.addTarget(self, action: #selector(self.increaseButtonAction(_:)), forControlEvents: .TouchUpInside)
+        increaseButton?.layer.borderColor = UIColor.init(red: 209.0/255.0, green: 213.0/255.0, blue: 219.0/255.0, alpha: 1).cgColor
+        increaseButton?.addTarget(self, action: #selector(self.increaseButtonAction(_:)), for: .touchUpInside)
         self.addSubview(increaseButton!)
 
         _minNumber = 1
         _maxNumber = 100000
-        self.backgroundColor = UIColor.clearColor()
+        self.backgroundColor = UIColor.clear
     }
 
-    func enableButtonWithValue(currentNumber:NSInteger)
+    func enableButtonWithValue(_ currentNumber:NSInteger)
     {
-        increaseButton?.enabled = (currentNumber < _maxNumber)
-        decreaseButton?.enabled = (currentNumber > _minNumber)
+        increaseButton?.isEnabled = (currentNumber < _maxNumber)
+        decreaseButton?.isEnabled = (currentNumber > _minNumber)
     }
 
-    func setMaxNumber(maxNumber:NSInteger)
+    func setMaxNumber(_ maxNumber:NSInteger)
     {
         _maxNumber = maxNumber
         let currentNumber = Int((textField?.text!)!)
@@ -106,7 +144,7 @@ class PNumberChooseControl: UIControl,UITextFieldDelegate {
         enableButtonWithValue(currentNumber!)
     }
 
-    func setMinNumber(minNumber:NSInteger)
+    func setMinNumber(_ minNumber:NSInteger)
     {
         _minNumber = minNumber
         let currentNumber = Int((textField?.text!)!)
@@ -120,31 +158,31 @@ class PNumberChooseControl: UIControl,UITextFieldDelegate {
 
     }
 
-    func decreaseButtonAction(sender:UIButton)
+    func decreaseButtonAction(_ sender:UIButton)
     {
         let currentNumber = Int((textField?.text!)!)
-        currentNumber! - 1
-        if currentNumber >= _minNumber {
-            _currnetValue = currentNumber
+        let b = currentNumber! - 1
+        if b >= _minNumber {
+            _currnetValue = b
         }
-        enableButtonWithValue(currentNumber!)
+        enableButtonWithValue(b)
     }
 
-    func increaseButtonAction(sender:UIButton)
+    func increaseButtonAction(_ sender:UIButton)
     {
-        var currentNumber = Int((textField?.text!)!)
-        currentNumber! + 1
-        if currentNumber <= _maxNumber {
-            _currnetValue = currentNumber
+        let currentNumber = Int((textField?.text!)!)
+        var b = currentNumber! + 1
+        if b <= _maxNumber {
+            _currnetValue = b
         }
         else
         {
-            currentNumber = _maxNumber
+            b = _maxNumber!
         }
-        enableButtonWithValue(currentNumber!)
+        enableButtonWithValue(b)
     }
 
-    func setCurrentValue(currentValue:NSInteger)
+    func setCurrentValue(_ currentValue:NSInteger)
     {
         var result = currentValue
         if (result > _maxNumber || result < _minNumber) {
@@ -153,11 +191,11 @@ class PNumberChooseControl: UIControl,UITextFieldDelegate {
         textField?.text = String(result)
     }
 
-    func inputTextField(text:UITextField) -> UITextField {
+    func inputTextField(_ text:UITextField) -> UITextField {
         return textField!
     }
 
-    func leftTipLabel(label:UILabel)->UILabel
+    func leftTipLabel(_ label:UILabel)->UILabel
     {
         return tipLabel!
     }
@@ -168,17 +206,17 @@ class PNumberChooseControl: UIControl,UITextFieldDelegate {
         return currentNumber!
     }
 
-    func textFieldDidEndEditing(textField: UITextField) {
+    func textFieldDidEndEditing(_ textField: UITextField) {
         if textField.text == nil {
             _currnetValue = _minNumber
             enableButtonWithValue(_currnetValue!)
         }
     }
 
-    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         let result = NSMutableString()
         result.setString(textField.text!)
-        result.replaceCharactersInRange(range, withString: string)
+        result.replaceCharacters(in: range, with: string)
         if result.length == 0 {
             return true
         }

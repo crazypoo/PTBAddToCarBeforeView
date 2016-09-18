@@ -15,13 +15,13 @@ class ViewController: UIViewController,PTBControlDataSource,PTBControlDelegate {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
 
-        _tbControl = PTBControl.init(frame: CGRectMake( 0, self.view.frame.size.height-250, self.view.frame.size.width, 250))
-        _tbControl!.backgroundColor = UIColor.clearColor()
+        _tbControl = PTBControl.init(frame: CGRect( x: 0, y: self.view.frame.size.height-250, width: self.view.frame.size.width, height: 250))
+        _tbControl!.backgroundColor = UIColor.clear
         _tbControl!.dataSource = self
         _tbControl!.delegate = self
-        _tbControl!._confirmBtn?.backgroundColor = UIColor.redColor()
-        _tbControl!._confirmBtn?.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-        _tbControl!._confirmBtn?.setTitle("加到购物车", forState: .Normal)
+        _tbControl!._confirmBtn?.backgroundColor = UIColor.red
+        _tbControl!._confirmBtn?.setTitleColor(UIColor.white, for: UIControlState())
+        _tbControl!._confirmBtn?.setTitle("加到购物车", for: UIControlState())
         _tbControl!._numberControl?.setCurrentValue(1)
         self.view.addSubview(_tbControl!)
         _tbControl!.reloadData()
@@ -33,7 +33,7 @@ class ViewController: UIViewController,PTBControlDataSource,PTBControlDelegate {
         // Dispose of any resources that can be recreated.
     }
 
-    func setControl(imageView: UIImageView, priceLabel: UILabel, storeLabel: UILabel, chooseLabel: UILabel, numberControl: PNumberChooseControl) {
+    func setControl(_ imageView: UIImageView, priceLabel: UILabel, storeLabel: UILabel, chooseLabel: UILabel, numberControl: PNumberChooseControl) {
         imageView.image = UIImage.init(named: "1")
         priceLabel.text = "111111"
         storeLabel.text = "222222"
@@ -44,7 +44,7 @@ class ViewController: UIViewController,PTBControlDataSource,PTBControlDelegate {
 
     }
 
-    func uniPriceInControl(control: PTBControl) -> NSInteger {
+    func uniPriceInControl(_ control: PTBControl) -> NSInteger {
         return 1000
     }
 
@@ -52,7 +52,7 @@ class ViewController: UIViewController,PTBControlDataSource,PTBControlDelegate {
         _tbControl?.removeFromSuperview()
     }
 
-    func confirmActionWithHowMuch(howMuch: NSString, integer: Int) {
+    func confirmActionWithHowMuch(_ howMuch: NSString, integer: Int) {
 
     }
 }
